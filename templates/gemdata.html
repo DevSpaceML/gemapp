@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='tofo.css')}}" />
+<body>
+<div class="content">
+	<div class="menuContainer">
+		<h1 class="siteheader">Gem Data</h1>
+		<ul class="submenu">
+			<li>Music</li>
+			<li>Theatre</li>
+			<li>Restaurants</li>
+			<li>Transportation</li>
+			<li>Travel</li>
+		</ul>
+	</div>
+	<div class="activeImg"></div>
+<div class="infoWrapper">	
+	<div class="data1">
+		<h2>Search term found {{elements}} times in the data</h2>
+		<p>
+			{% for set in dataset %}
+				<tr>
+				{% for k,v in set.items() %}
+				  <p><td>{{k}}</td>&nbsp; : &nbsp;<td>{{v}}</td></p>
+				{% endfor %}	
+				<tr>
+				<hr>	
+			{% endfor %}
+		</p>		
+	</div>
+</div>	
+</div>
+</body>
+</html>

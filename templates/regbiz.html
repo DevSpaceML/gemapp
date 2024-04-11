@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='tofo.css')}}" />
+<body>	
+<div class="content">		
+	<div class="formcontainer">
+		<h3>Register your Business</h3>
+		<form method="POST" action="/register">			
+			{{form.csrf_token}}
+			{{ form.hidden_tag() }}
+			<p>{{form.name.label}}{{form.name}}{{form.email.label}}{{form.email}}<p>
+			<p>{{form.StreetName.label}} {{form.StreetName}}</p>
+			<p>{{form.location.label}}{{form.location}}<p>
+			<p>{{form.PostCode.label}}{{form.PostCode}}</p>	
+			<p>{{form.BusType.label}}{{form.BusType}}</p>
+			<p>{{form.OtherBusType.label}}{{form.OtherBusType}}</p>
+			<p>{{form.Profile.label}}</p><p>{{form.Profile}}</p>
+			<p>
+			{{form.OpHoursStart.label}}{{form.OpHoursStart}}
+			{{form.OpHoursEnd.label}}{{form.OpHoursEnd}}
+			</p>
+			{{form.submit()}}						
+		</form>	
+	</div>
+</div>
+</body>
+</html>	

@@ -1,0 +1,5 @@
+
+	if form.validate_on_submit():
+		name = form.name.data
+		email =  form.email.data
+		location = 	form.location.data
