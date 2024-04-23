@@ -6,7 +6,7 @@ from flask_bootstrap import Bootstrap5
 import mysql.connector
 from  busreg import BusRegForm
 
-app = Flask(__name__, template_folder='templates',static_folder='static')
+application = app = Flask(__name__, template_folder='templates',static_folder='static')
 app.secret_key = 'tO$&!|0wkamvVia0?n$NqIRVWOG'
 csrf = CSRFProtect(app)
 
