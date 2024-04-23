@@ -24,7 +24,7 @@ h1.siteheader{position: absolute;left:40%;top:0;margin:0;padding:0;color: #fffff
 .info1 h2{font-size:1em}
 .info2{position: absolute; right:1.5em;width:50%;min-height:150px; font-size:1.25em; top:0; background-color: transparent; padding: 1em;opacity: .75;
 	color: #20404E}
-.info2 h2{font-size:1.25em}
+.info2 h2{font-size:1.125em}
 .info2 ul{background-color: #c5eae7}
 
 .data1{position: relative; left:1em; width:80%;min-height:150px; font-size:0.9em;font-family: Gotu,Menlo, Georgia;font-weight:300; top:0;background-color: transparent; padding: 1em; opacity: .75; color: #20404E}
