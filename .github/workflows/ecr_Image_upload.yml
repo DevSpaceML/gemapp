@@ -1,0 +1,43 @@
+# ECR - GitHub Actions
+# ----------------------
+# yaml calls bash script creates docker image, logs into ECR, uploads tagged image
+# Github recognizes 'latest' tag, calls build-upload action
+# yaml runs build and upload of image to ECR on updated tag
+
+name: Build Image-Push to ECR
+
+on:
+  push:
+    tags:
+      - 'latest'
+jobs:
+  conditional-build-and-push:
+    name: Build-Push-On-Change
+    runs-on: ubuntu-latest
+
+    permissions:
+       id-token: write
+       contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::312907937200:role/ClusterAdminRole
+          aws-region: us-east-1
+
+      - name: log in to AmazonECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build Docker Image
+        run: |
+          IMAGE_TAG=latest
+          docker build -t 312907937200.dkr.ecr.us-east-1.amazonaws.com/dev/tiyeni.dev:$IMAGE_TAG .
+
+      - name: Push image to ECR
+        run: |
+          IMAGE_TAG=latest
+          docker push 312907937200.dkr.ecr.us-east-1.amazonaws.com/dev/tiyeni.dev:$IMAGE_TAG
