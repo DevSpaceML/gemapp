@@ -6,38 +6,40 @@ from flask_bootstrap import Bootstrap5
 import mysql.connector
 from  busreg import BusRegForm
 
-application = app = Flask(__name__, template_folder='templates',static_folder='static')
+application = app = Flask(__name__, template_folder='templates', static_folder='static')
 app.secret_key = 'tO$&!|0wkamvVia0?n$NqIRVWOG'
 csrf = CSRFProtect(app)
 
 @app.route("/")
 def main():
 	return render_template('hometpl.html')
+
 @app.route("/activities")
 def activities():
 	return render_template('activities.html')
-@app.route("/gemdata")
-def gemdata():
+
+@app.route("/accomodation")
+def accomodation():
 	data = mysql.connector.connect(
-		host = "localhost",
+		host = "host.docker.internal",
 		user = "root",
-		password = "M0y0nd!zv0!",
-		database = "allsocialdata" 
+		password = "",
+		database = "tiyeni" 
 		)
-	searchterm = "ambience"
+	
 	elements = 0
 	results = []
 	DbCursor = data.cursor(dictionary=True)
-	gemsql =  "select user_ScreenName,user_FollowersCount,hashtagquery,tweet_Text from twitter where tweet_Text LIKE '%"+searchterm+"%'"
-	DbCursor.execute(gemsql)
+	sql_getStays =  "select * from accomz"
+	DbCursor.execute(sql_getStays)
 
 	for i in DbCursor:
 		results.append(i)
-		elements = elements + 1 
-	return render_template('gemdata.html', elements = elements, dataset = results)	
-@app.route("/accomodation")
-def stays():
-	return render_template('accomodation.html')
+		elements = elements + 1
+
+	print(elements)	
+	return render_template('accomodation.html', elements = elements, dataset = results)	
+
 @app.route("/register", methods=['GET','POST'])
 def register():
 	message = " "
@@ -49,7 +51,6 @@ def register():
 		cols = list(formdata.keys())
 		vals = list(formdata.values())
 
-
 		#Loop through and check if key is null and add to columns string if not
 		for x in cols:
 			if cols[x] is none:
@@ -59,17 +60,10 @@ def register():
 
 		print(columns)		
 
-
 		#for key in formdata:
 		print('columns are ',cols);
 		print('values  are ',vals);
 
-		''' lindoDb = mysql.connector.connect(
-		host = "localhost",
-		user = "gemadmin",
-		password = "g3m@dmin!",
-		database = "mozdata" 
-		)'''
 
 		dbCursor = lindoDb.cursor()
 		sqlStmt = "INSERT INTO venues (name,email,streetname,location,postcode,type,profile,OpStart,OpEnd) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)"
@@ -83,8 +77,6 @@ def register():
 		print(message)	
 		
 	return render_template('regbiz.html', form=form, message=message)
-
 	
-
-
-		
+if __name__ == "__main__":
+	app.run()

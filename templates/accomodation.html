@@ -22,7 +22,19 @@
 		</p>
 		<p>
 			Take a look at our selection of featured accomodations on this site or use our accomodation directory listing to find something that suits your taste. 
-		</p>		
+		</p>
+		
+		<p>
+			{% for item in dataset %}
+			  <div> 
+				<ul>
+					<li class="list-h1">{{ item["name"] }} </li>
+					<li class="list-type">{{ item["style"] }} </li>
+					<li class="none">{{ item["descrip"] }} </li>
+				</ul>
+			  </div>
+			{% endfor %}
+		</p>
 	</div>
 	<div class="info2"> 
 		<h2>Events this week.</h2>

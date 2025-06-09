@@ -8,7 +8,7 @@ h2{font-family: Gotu,Menlo, Georgia; font-size: 1.5em;color:#e60073 ;text-shadow
 ul h3{font-size: 1em; font-family: Bakersville; margin: .25em; font-weight: lighter; color: #fa0087;}
 ul li{list-style-type: circle;font-size: .9em; font-family: American Typewriter; font-weight: lighter; color: #2986cc;}
 
-tr {border bottom: 1px solid #dcdcdc}
+tr {border-bottom: 1px solid #dcdcdc}
 
 h1.siteheader{position: absolute;left:40%;top:0;margin:0;padding:0;color: #ffffff; z-index: 2; text-shadow: 1px 1px 2px #808080; display: block;width: auto;}
 .menuContainer{position: relative;top: 0;left: 0;padding: 0;display: block;}
@@ -27,6 +27,10 @@ h1.siteheader{position: absolute;left:40%;top:0;margin:0;padding:0;color: #fffff
 .info2 h2{font-size:1.125em}
 .info2 ul{background-color: #c5eae7}
 
+li.list-h1{list-style-type: none; font-weight: bold; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; font-size:1.15em; color: #212020; margin-bottom: .25em; }
+li.list-type {list-style-type: none; color: #e60073;}
+li.descrip {list-style-type: none; font-size: 1em;}
+
 .data1{position: relative; left:1em; width:80%;min-height:150px; font-size:0.9em;font-family: Gotu,Menlo, Georgia;font-weight:300; top:0;background-color: transparent; padding: 1em; opacity: .75; color: #20404E}
 .data1 h2{font-size:1em}	
 
@@ -38,7 +42,7 @@ h1.siteheader{position: absolute;left:40%;top:0;margin:0;padding:0;color: #fffff
  			background-repeat: no-repeat;overflow: hidden;margin: 0; display: block}
 
 /* Form Styles */
-.formcontainer{background-color: #D3E5EC; position: relative; left: 10%; padding: 1em; width: 80%;}
+.formcontainer{background-color:#D3E5EC; position: relative; left: 10%; padding: 1em; width: 80%;}
 .formcontainer h3{font-size: 2em;font-weight: bold; text-align: center; font-family: arial bold;display: block;}
 .formcontainer label{font-size: 1.1em; width:150px;display: inline-block;}
 .formcontainer input{font-size: 0.9em; margin: 0.5em;}

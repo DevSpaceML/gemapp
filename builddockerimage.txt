@@ -1,0 +1,18 @@
+https://hub.docker.com/repositories/devspaceml
+
+#Build, tag, push
+docker buildx build -t devspaceml/gemapp:latest
+
+docker tag gemapp:latest devspaceml/gemapp:latest
+
+docker push docker.io/devspaceml/gemapp:latest
+
+
+----------------------------------------------------
+#Build AWS image
+
+docker buildx build -t eks_python_nginx:09-01-2024
+
+docker tag eks_python_nginx:09-01-2024 998787123729.dkr.ecr.us-east-1.amazonaws.com/eks_python_nginx:09-01-2024
+
+docker push 998787123729.dkr.ecr.us-east-1.amazonaws.com/eks_python_nginx:09-01-2024
