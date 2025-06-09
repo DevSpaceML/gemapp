@@ -35,7 +35,7 @@ jobs:
       - name: Build Docker Image
         run: |
           IMAGE_TAG=latest
-          docker build -t 312907937200.dkr.ecr.us-east-1.amazonaws.com/dev/tiyeni.dev:$IMAGE_TAG
+          docker build -t 312907937200.dkr.ecr.us-east-1.amazonaws.com/dev/tiyeni.dev:$IMAGE_TAG .
 
       - name: Push image to ECR
         run: |
