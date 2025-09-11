@@ -10,6 +10,7 @@ Flask-SQLAlchemy==2.4.4
 Flask-Validator==1.4.2
 Flask-WTF==1.2.1
 idna==3.6
+instaloader==4.14.1
 isbnlib==3.10.3
 iso3166==1.0.1
 itsdangerous==2.1.2
@@ -26,4 +27,3 @@ typing_extensions==4.9.0
 urllib3==2.2.1
 Werkzeug==3.0.1
 WTForms==3.1.2
-uWSGI==2.0.17.1

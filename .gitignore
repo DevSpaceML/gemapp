@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# site planning text
+siteplan.txt
+
 # C extensions
 *.so
 

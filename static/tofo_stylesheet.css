@@ -1,0 +1,400 @@
+/* Tofo Beach Activities Stylesheet */
+/* Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /* Beach-inspired Color Palette */
+  --ocean-blue: #0077be;
+  --sand-beige: #f4f1e8;
+  --coral-orange: #ff6b35;
+  --deep-teal: #006b5c;
+  --sunset-gold: #ffa500;
+  --white: #ffffff;
+  --text-dark: #2c3e50;
+  --text-light: #6c757d;
+  --border-light: #e9ecef;
+  
+  /* Typography */
+  --font-heading: 'Playfair Display', 'Georgia', serif;
+  --font-body: 'Inter', 'Helvetica Neue', sans-serif;
+  --font-accent: 'Oswald', 'Arial Black', sans-serif;
+  
+  /* Spacing */
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2rem;
+  --space-xl: 3rem;
+  
+  /* Layout */
+  --container-width: 1200px;
+  --border-radius: 8px;
+  --shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+body {
+  font-family: var(--font-body);
+  line-height: 1.6;
+  color: var(--text-dark);
+  background: linear-gradient(135deg, var(--sand-beige) 0%, var(--white) 100%);
+  font-size: 16px;
+  min-height: 100vh;
+}
+
+/* Typography */
+h1, h2, h3 {
+  font-family: var(--font-heading);
+  line-height: 1.3;
+  margin-bottom: var(--space-sm);
+}
+
+h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: var(--ocean-blue);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  color: var(--deep-teal);
+  font-weight: 600;
+  margin-top: var(--space-lg);
+  margin-bottom: var(--space-md);
+}
+
+h3 {
+  font-size: clamp(1rem, 2.5vw, 1rem);
+  color: var(--coral-orange);
+  font-weight: 600;
+  margin-bottom: var(--space-xs);
+}
+
+p {
+  margin-bottom: var(--space-md);
+  color: var(--text-dark);
+  font-size: clamp(0.95rem, 1.1vw, 1.1rem);
+}
+
+a {
+  color: var(--ocean-blue);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--coral-orange);
+  text-decoration: underline;
+}
+
+/* Main Layout */
+.content {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: var(--space-lg);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-xl);
+}
+
+.admincontent {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: var(--space-lg);
+  background-color: #cbd5fd;
+}
+
+.admincontent h1{
+  font-size: 2em;
+  color: blueviolet;
+}
+
+.adminform{
+  width: 80%;
+  margin-left: 10%;
+  margin-top: 1em;
+  padding: 10px;
+}
+
+
+/* Header and Menu */
+.menuContainer {
+  background: transparent;
+  padding: var(--space-lg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  text-align: center;
+  border-left: 4px solid var(--ocean-blue);
+}
+
+.siteheader {
+  margin-bottom: var(--space-lg);
+  position: relative;
+}
+
+.siteheader::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--coral-orange), var(--sunset-gold));
+  margin: var(--space-md) auto 0;
+  border-radius: 2px;
+}
+
+.submenu {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--space-lg);
+}
+
+.submenu li {
+  font-family: var(--font-accent);
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-light);
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.2s ease;
+  position: relative;
+}
+
+.submenu li:hover {
+  color: var(--coral-orange);
+  transform: translateY(-2px);
+}
+
+.submenu li::before {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--coral-orange);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.submenu li:hover::before {
+  transform: scaleX(1);
+}
+
+/* Active Image Section */
+.activeImg {
+  height: 300px;
+  background: linear-gradient(
+    rgba(0, 119, 190, 0.3),
+    rgba(255, 107, 53, 0.3)
+  ),
+  url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300"><defs><pattern id="wave" x="0" y="0" width="400" height="300" patternUnits="userSpaceOnUse"><path d="M0,150 Q100,100 200,150 T400,150 V300 H0 Z" fill="%23e6f3ff"/></pattern></defs><rect width="1200" height="300" fill="url(%23wave)"/></svg>') center/cover;
+  border-radius: var(--border-radius);
+  margin-bottom: var(--space-xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.activeImg::before {
+  content: '🏄‍♂️ Experience Tofo Beach 🌊';
+  animation: fadeIn 2s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Info Wrapper */
+.infoWrapper {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--space-xl);
+}
+
+/* Info Sections */
+.info1 {
+  background: var(--white);
+  padding: var(--space-lg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  border-left: 4px solid var(--deep-teal);
+}
+
+.info1:first-of-type {
+  margin-bottom: var(--space-xl);
+}
+
+.info2 {
+  background: var(--white);
+  padding: var(--space-lg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  border-left: 4px solid var(--coral-orange);
+  height: fit-content;
+  position: sticky;
+  top: var(--space-lg);
+}
+
+/* Accomodation List */
+
+.accomz ul {
+  list-style: none;
+  margin-bottom: 1em;
+}
+
+.accomz ul img{
+  size: 0lvw;
+}
+
+/* Events List */
+.info2 ul {
+  list-style: none;
+  margin-top: var(--space-md);
+}
+
+.info2 li {
+  background: var(--sand-beige);
+  padding: var(--space-md);
+  margin-bottom: var(--space-md);
+  border-radius: var(--border-radius);
+  border-left: 3px solid var(--sunset-gold);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.info2 li:hover {
+  transform: translateX(5px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.info2 li:last-child {
+  margin-bottom: 0;
+}
+
+.info2 h3 {
+  color: var(--sunset-gold);
+  margin-bottom: var(--space-xs);
+  font-family: var(--font-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Responsive Design */
+@media (max-width: 968px) {
+  .infoWrapper {
+    grid-template-columns: 1fr;
+  }
+  
+  .info2 {
+    position: static;
+    order: -1;
+  }
+  
+  .submenu {
+    gap: var(--space-md);
+  }
+  
+  .submenu li {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .content {
+    padding: var(--space-md);
+    gap: var(--space-lg);
+  }
+  
+  .menuContainer,
+  .info1,
+  .info2 {
+    padding: var(--space-md);
+  }
+  
+  .submenu {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+  
+  .activeImg {
+    height: 200px;
+    font-size: 1.2rem;
+  }
+  
+  .activeImg::before {
+    content: '🏄‍♂️ Tofo Beach 🌊';
+  }
+}
+
+@media (max-width: 480px) {
+  .content {
+    padding: var(--space-sm);
+  }
+  
+  h1 {
+    font-size: 1.8rem;
+  }
+  
+  h2 {
+    font-size: 1.4rem;
+  }
+  
+  .activeImg {
+    height: 150px;
+    font-size: 1rem;
+  }
+  
+  .info2 li {
+    padding: var(--space-sm);
+  }
+}
+
+/* Animation for smooth loading */
+.content > * {
+  animation: slideUp 0.6s ease-out forwards;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.content > *:nth-child(1) { animation-delay: 0.1s; }
+.content > *:nth-child(2) { animation-delay: 0.2s; }
+.content > *:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes slideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Print Styles */
+@media print {
+  body {
+    background: white;
+  }
+  
+  .activeImg {
+    background: var(--sand-beige);
+    color: var(--text-dark);
+  }
+  
+  .content {
+    max-width: none;
+    padding: 0;
+  }
+  
+  .infoWrapper {
+    grid-template-columns: 1fr;
+  }
+}

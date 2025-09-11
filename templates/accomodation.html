@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='tofo.css')}}" />
+<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='tofo_stylesheet.css')}}" />
 <body>
 <div class="content">
 	<div class="menuContainer">
@@ -16,7 +16,7 @@
 	<div class="cribImg"></div>
 <div class="infoWrapper">	
 	<div class="info1">
-		<h2>Accomodation in Tofo and Vilankulos</h2>
+		<h2>Accomodation in Tofo and Barra Beach</h2>
 		<p>In tofo you'll find a wide variety of accomodation to suit every traveller. From budget and backpacker accomodations to 5 star
 			accomodations. 	
 		</p>
@@ -26,11 +26,12 @@
 		
 		<p>
 			{% for item in dataset %}
-			  <div> 
+			  <div class="accomz"> 
 				<ul>
-					<li class="list-h1">{{ item["name"] }} </li>
-					<li class="list-type">{{ item["style"] }} </li>
-					<li class="none">{{ item["descrip"] }} </li>
+					<h3>{{ item["name"] }}</h3>
+					<img src="static/tofobeach.jpg">
+					<li>{{ item["style"] }} </li>
+					<li>{{ item["descrip"] }} </li>
 				</ul>
 			  </div>
 			{% endfor %}

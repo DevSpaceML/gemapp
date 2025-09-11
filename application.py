@@ -3,7 +3,7 @@ from flask_wtf import FlaskForm, CSRFProtect
 from wtforms import Form, StringField, SubmitField,SelectField, validators
 from wtforms.widgets import TextArea
 from flask_bootstrap import Bootstrap5
-import mysql.connector
+import pietest
 from  busreg import BusRegForm
 
 application = app = Flask(__name__, template_folder='templates', static_folder='static')
@@ -16,31 +16,25 @@ def main():
 
 @app.route("/activities")
 def activities():
+	
 	return render_template('activities.html')
 
 @app.route("/accomodation")
 def accomodation():
-	data = mysql.connector.connect(
-		host = "host.docker.internal",
-		user = "root",
-		password = "",
-		database = "tiyeni" 
-		)
 	
-	elements = 0
-	results = []
-	DbCursor = data.cursor(dictionary=True)
-	sql_getStays =  "select * from accomz"
-	DbCursor.execute(sql_getStays)
+	results = pietest.accommodation_data('mozambique', 'tofo', 'style','beach')
+	data = results['data']
 
-	for i in DbCursor:
-		results.append(i)
-		elements = elements + 1
+	return render_template('accomodation.html', dataset = data)
 
-	print(elements)	
-	return render_template('accomodation.html', elements = elements, dataset = results)	
+@app.route("/admin/newevent")
+def create_event():
+    message = ""
+	columns = None
+	form    = eventsform(FlaskForm)
 
-@app.route("/register", methods=['GET','POST'])
+
+@app.route("/admin/register", methods=['GET','POST'])
 def register():
 	message = " "
 	columns = None
@@ -53,7 +47,7 @@ def register():
 
 		#Loop through and check if key is null and add to columns string if not
 		for x in cols:
-			if cols[x] is none:
+			if cols[x] is None:
 				pass
 			else:
 				columns.slice(cols[x]+',')

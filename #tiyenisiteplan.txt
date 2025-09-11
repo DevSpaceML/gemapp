@@ -1,0 +1,16 @@
+# Tiyeni Site Plan
+
+* Updating listings 
+    admin web front to administer and update listings, and images. 
+    Cron Job to gather and insert listings
+
+* Country/region python to select and present region info, events etc. 
+
+    e.g * 
+          tiyeni.com/mozambique
+          tiyeni.com/mozambique/attractions  
+          tiyeni.com/mozambique/tofo ** OR (Maputo, BarraBeach, PontaDouro, Vilankulos, Pomene, Pemba, Bilene)
+          tiyeni.com/mozambique/tofo/activities
+          tiyeni.com/mozambique/tofo/stays
+          tiyeni.com/mozambique/eats
+
