@@ -35,6 +35,7 @@ jobs:
     outputs:
       image-tag: ${{ steps.generate-tag.outputs.image-tag }}
       image-uri: ${{ steps.generate-tag.outputs.image-uri }}
+      environment: ${{ steps.generate-tag.outputs.environment }}
 
     steps:
       - name: Checkout repository
@@ -60,13 +61,13 @@ jobs:
               ENVIRONMENT="production"
               IMAGE_TAG="v$(date +%Y%m%d)-$(git rev-parse --short HEAD)"
             else
-              ENVIROINMENT="dev"
+              ENVIRONMENT="dev"
               IMAGE_TAG="latest"  
             fi
           fi
           
           echo "image-tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
-          echo "image-uri=${{ env.ECR_REGISTRY }}/dev/gemapp:$IMAGE_TAG" >> $GITHUB_OUTPUT
+          echo "image-uri=${{ env.ECR_REGISTRY }}/$ENVIRONMENT/gemapp:$IMAGE_TAG" >> $GITHUB_OUTPUT
           echo "selected environment: $ENVIRONMENT"
           echo "generated image tag : $IMAGE_TAG"
 
