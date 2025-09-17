@@ -1,9 +1,4 @@
-# ECR - GitHub Actions
-# ----------------------
-# yaml calls bash script creates docker image, logs into ECR, uploads tagged image
-# Github recognizes 'latest' tag, calls build-upload action
-# yaml runs build and upload of image to ECR on updated tag
-
+---
 name: Build Image-Push to ECR
 
 on:
@@ -27,26 +22,26 @@ on:
         type: string
 env:
   AWS_REGION: us-east-1
-  ECR_REGISTRY:  586098609239.dkr.ecr.us-east-1.amazonaws.com
+  ECR_REGISTRY: 586098609239.dkr.ecr.us-east-1.amazonaws.com
 
 jobs:
   conditional-build-and-push:
     name: Build-Push-On-Change
     runs-on: ubuntu-latest
     permissions:
-       id-token: write
-       contents: read
+      id-token: write
+      contents: read
 
-    outputs: 
+    outputs:
       image-tag: ${{ steps.generate-tag.outputs.image-tag }}
       image-uri: ${{ steps.generate-tag.outputs.image-uri }}
-      
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+
       - name: Generate Image Tag
         id: generate-tag
         run: |
@@ -65,7 +60,7 @@ jobs:
           else
             if [ "${{github.ref_name}}" = "main" ]; then
               ENVIRONMENT='production'
-              IMAGE_TAG="v$(date +%Y%m%d)-$(git rev-parse --short HEAD)"    
+              IMAGE_TAG="v$(date +%Y%m%d)-$(git rev-parse --short HEAD)"
 
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
