@@ -48,19 +48,27 @@ jobs:
           if ["${{ github.event_name }}" = "workflow_dispatch"] && [ -n "${{ inputs.image-tag }}"]; then
             IMAGE_TAG="${{ inputs.image-tag }}"
             ENVIRONMENT="${{ inputs.environments }}"
-          elif
+          else
             #Auto-Generate tag based on commit
             if [ "${{ github.ref_name }}" = "dev" ]; then
               ENVIRONMENT="dev"
-              IMAGE_TAG="dev-$(git rev-parse --short HEAD)-$(date +%Y%m%d-%H%M"
-          elif
-            if [ "${{ github.ref_name }}" = "staging" ]; then
+              IMAGE_TAG="dev-$(git rev-parse --short HEAD)-$(date +%Y%m%d-%H%M)"
+            elif [ "${{ github.ref_name }}" = "staging" ]; then
               ENVIRONMENT="staging"
               IMAGE_TAG="staging-$(git rev-parse --short HEAD)-$(date +%Y%m%d-%H%M)"
-          else
-            if [ "${{ github.ref_name }}" = "main" ]; then
+            elif [ "${{ github.ref_name }}" = "main" ]; then
               ENVIRONMENT="production"
               IMAGE_TAG="v$(date +%Y%m%d)-$(git rev-parse --short HEAD)"
+            else
+              ENVIROINMENT="dev"
+              IMAGE_TAG="latest"  
+            fi
+          fi
+          
+          echo "image-tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
+          echo "image-uri=${{ env.ECR_REGISTRY }}/dev/gemapp:$IMAGE_TAG" >> $GITHUB_OUTPUT
+          echo "selected environment: $ENVIRONMENT"
+          echo "generated image tag : $IMAGE_TAG"
 
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
@@ -73,10 +81,11 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          IMAGE_TAG=latest
-          docker build -t 586098609239.dkr.ecr.us-east-1.amazonaws.com/dev/gemapp .
+          IMAGE_URI="${{ steps.generate-tag.outputs.image-uri }}"
+          echo "Building image: $IMAGE_URI"
+          docker build -t $IMAGE_URI .
 
       - name: Push image to ECR
         run: |
-          IMAGE_TAG=latest
-          docker push 586098609239.dkr.ecr.us-east-1.amazonaws.com/dev/gemapp:$IMAGE_TAG
+          IMAGE_URI="${{ steps.generate-tag.outputs.image-uri }}"
+          docker push $IMAGE_URI
