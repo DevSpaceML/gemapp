@@ -45,21 +45,21 @@ jobs:
       - name: Generate Image Tag
         id: generate-tag
         run: |
-          if ["${{github.event_name}}" = "workflow_dispatch"] && [ -n "${{inputs.image-tag}}"]; then
-            IMAGE_TAG="${{inputs.image-tag}}"
+          if ["${{ github.event_name }}" = "workflow_dispatch"] && [ -n "${{ inputs.image-tag }}"]; then
+            IMAGE_TAG="${{ inputs.image-tag }}"
             ENVIRONMENT="${{ inputs.environments }}"
           elif
             #Auto-Generate tag based on commit
-            if [ "${{github.ref_name}}" = "dev" ]; then
-              ENVIRONMENT='dev'
+            if [ "${{ github.ref_name }}" = "dev" ]; then
+              ENVIRONMENT="dev"
               IMAGE_TAG="dev-$(git rev-parse --short HEAD)-$(date +%Y%m%d-%H%M"
           elif
-            if [ "${{github.ref_name}}" = "staging" ]; then
-              ENVIRONMENT='staging'
+            if [ "${{ github.ref_name }}" = "staging" ]; then
+              ENVIRONMENT="staging"
               IMAGE_TAG="staging-$(git rev-parse --short HEAD)-$(date +%Y%m%d-%H%M)"
           else
-            if [ "${{github.ref_name}}" = "main" ]; then
-              ENVIRONMENT='production'
+            if [ "${{ github.ref_name }}" = "main" ]; then
+              ENVIRONMENT="production"
               IMAGE_TAG="v$(date +%Y%m%d)-$(git rev-parse --short HEAD)"
 
       - name: Configure AWS credentials (OIDC)
