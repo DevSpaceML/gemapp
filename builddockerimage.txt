@@ -7,8 +7,8 @@ docker tag gemapp:latest devspaceml/gemapp:latest
 
 docker push docker.io/devspaceml/gemapp:latest
 
-
 ----------------------------------------------------
+
 #Build AWS image
 
 docker buildx build -t eks_python_nginx:09-01-2024
