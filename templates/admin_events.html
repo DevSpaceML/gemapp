@@ -4,11 +4,25 @@
 <body>
 <div class="admincontent">
     <h1>Create an Event</h1>
-    <div class="adminform">
-        <form method="post" action="/create_event">
+    <div class="formcontainer">
+        <form method="POST" action="/admin/newevent">
             {{form.csrf_token}}
 			{{ form.hidden_tag() }}
-            <p>{{form.eventname.label}}{{form.eventname}}</p>
+            <p>{{form.evntname.label}}{{form.evntname}}</p>
+            <p>{{form.venue.label}}{{form.venue}}</p>
+            <p>{{form.evnt_type.label}}{{form.evnt_type}}</p>
+            <p>{{form.artist.label}}{{form.artist}}</p>
+            <p>{{form.descrip.label}}{{form.descrip}}</p>
+            <p>{{form.evntdate.label}}{{form.evntdate}}</p>
+            <p>{{form.evntname.label}}{{form.evntname}}</p>
+            <p>{{form.city.label}}{{form.city}}</p>
+            <p>{{form.address.label}}{{form.address}}</p>
+            <p>{{form.gps_point.label}}{{form.gps_point}}</p>
+            <p>{{form.country.label}}{{form.country}}</p>
+            <p>{{form.start_date.label}}{{form.start_date}}</p>
+            <p>{{form.end_date.label}}{{form.end_date}}</p>
+            <p>{{form.evnt_charge.label}}{{form.evnt_charge}}</p>
+            <p>{{form.rel_evnt.label}}{{form.rel_evnt}}</p>
             {{form.submit}}
         </form>
     </div>
