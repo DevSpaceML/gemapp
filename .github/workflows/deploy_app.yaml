@@ -11,7 +11,6 @@ on:
 env:
   AWS_REGION: us-east-1
   APP_NAME: gemapp
-  ECR_REPOSITORY: ${{ secrets.AWS_ECR_REPO }}
 
 jobs:
   DeployAppToEnv:
