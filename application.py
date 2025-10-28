@@ -3,8 +3,9 @@ from flask_wtf import FlaskForm, CSRFProtect
 from wtforms import Form, StringField, SubmitField,SelectField, validators
 from wtforms.widgets import TextArea
 from flask_bootstrap import Bootstrap5
-import pietest
+import pietest as database
 from  busreg import BusRegForm
+from eventsform import EventsForm
 
 application = app = Flask(__name__, template_folder='templates', static_folder='static')
 app.secret_key = 'tO$&!|0wkamvVia0?n$NqIRVWOG'
@@ -27,12 +28,39 @@ def accomodation():
 
 	return render_template('accomodation.html', dataset = data)
 
-@app.route("/admin/newevent")
-def create_event():
-    message = ""
-	columns = None
-	form    = eventsform(FlaskForm)
+@app.route("/admin/newevent",  methods=['GET','POST'])
+def newevent():
+    message = " "
+    columns = ''
+    placeholders = ''
+    values = []
+    form = EventsForm(FlaskForm)
 
+    if form.validate_on_submit():
+        formdata = request.form
+        
+        valid_data = {k:v for k,v in formdata.items()
+					  if v and k not in ['csrf_token', 'submit']}
+		
+        if valid_data:
+            columns = ','.join(valid_data.keys())
+            placeholders = ','.join(['%s'] * len(valid_data.keys())) 
+            values = list(valid_data.values())
+            
+            print(values)
+            ins_event = f"INSERT INTO EVENTS ({columns}) VALUES({placeholders})"
+
+            print(ins_event)
+               
+            with database.get_db_conn() as db_conn:
+                db_cursor = db_conn.cursor()
+                db_cursor.execute(ins_event, values)		
+			
+    else:
+         print(values)
+         print(columns)				
+                
+    return render_template('admin_events.html', form=form, message=message)
 
 @app.route("/admin/register", methods=['GET','POST'])
 def register():

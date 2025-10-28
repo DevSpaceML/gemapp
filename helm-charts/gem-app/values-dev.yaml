@@ -1,0 +1,153 @@
+# Development environment variables
+# Overrides defaults in values.yaml
+
+global:
+  environment: dev
+
+replicaCount: 1
+
+#Image
+image:
+  repository: 586098609239.dkr.ecr.us-east-1.amazonaws.com/dev/gemapp
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+# ServiceAccount
+ServiceAccount:
+  create: true
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::586098609239:role/GitHubActionsRole
+  name: gemapp-svcacc
+
+# Pod Annotations
+podAnnotations:
+  env: development
+
+# Ingress Configuration - Dev
+Ingress:
+  enabled: true
+  className: alb
+  annotations:
+    # Application LoadBalancer Configurations
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/load-balancer-name: "gemapp-dev-alb"
+    alb.ingress.kubernetes.io/group.name: "gemapp"
+
+    #listeners
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
+
+    # certificate
+    alb.ingress.kubernetes.io/certificate-arn: ""
+
+    # healthchecks
+    alb.ingress.kubernetes.io/healthcheck-path: "/"
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: "30"
+    alb.ingress.kubernetes.io/healthcheck-timeout-seconds: "10"
+    alb.ingress.kubernetes.io/healthy-threshold-count: "2"
+    alb.ingress.kubernetes.io/unhealthy-threshold-count: "3"
+
+    # Network
+    alb.ingress.kubernetes.io/security-groups: ""
+    alb.ingress.kubernetes.io/subnets: ""
+    alb.ingress.kubernetes.io/tags: Environment=dev,ManagedBy=terraform
+    
+  hosts:
+    - gemmapp.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+# Service Config Values
+Service:
+  type: ClusterIP
+  port: 8080
+  targetPort: 8080
+
+# Deployment Config Values
+resources:
+  limits:
+    cpu: 500m
+    memory: 512mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+autoscaling: false
+
+livenessProbe:
+  httpGet:
+    path: /health
+    port: 8080
+  initialDelaySeconds: 5
+  periodSeconds: 30
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    path: /ready
+    port: 8080
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 5
+
+# Development Environment Variables
+
+env:
+  - name: APP_ENV
+    value: "Development"
+  - name: LOG_LEVEL
+    value: "debug"
+  - name: PORT
+    value: 8080
+  - name: DEBUG
+    value: "true"
+  - name: ENABLE_HOT_RELOAD
+    value: "true"
+
+# Development Config
+
+configMap:
+  enabled: true
+  data:
+    app.Config: |
+      {
+        "feature_flags": {
+          "new_feature": true,
+          "beta_features": true,
+          "debug_mode":
+        },
+        "cache": {
+          "ttl": 60,
+          "max_size": 100
+        }
+      }
+
+persistence: false
+
+podDisruptionBudget:
+  enabled: false
+
+networkPolicy:
+  enabled: false
+
+# Service monitor for Prometheus
+
+serviceMonitor:
+  enabled: true
+  interval: 60s
+  path: /metrics
+
+labels:
+  environment: dev
+  team: devops
+
+annotations:
+  ManagedBy: terraform
+

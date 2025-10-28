@@ -1,0 +1,198 @@
+global:
+  environment: dev
+
+# Application Settings 
+
+app:
+  name: gemmapp
+  version: "1.0.0"
+
+# Replica count
+replicaCount: 2
+
+# Image Configuration
+image: 586098609239.dkr.ecr.us-east-1.amazonaws.com/dev/gemapp
+pullPolicy: IfNotPresent
+tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+# Service Account
+ServiceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+# Pod annotations
+podAnnotations: {}
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  fsGroup: 1000
+
+# Container Security Context
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFileSystem: true
+  capabilities:
+    drop:
+      - ALL
+
+# Service Configuration 
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+  annotations: {}
+
+# Ingress Configuration
+ingress:
+  enabled: true
+  className: alb
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP: 80"},{"HTTPS":443}]'
+    alb.ingress.kubernetes.io/healthcheck-path: /health
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: "15"
+    alb.ingress.kubernetes.io/healthcheck-timeout-seconds: "5"
+    alb.ingress.kubernetes.io/unhealthy-threshold-count: "2"
+    alb.ingress.kubernetes.io/certificate-arn: ""
+    alb.ingress.kubernetes.io/security-groups: ""
+    alb.ingress.kubernetes.io/subnets: ""
+hosts:
+  - host: dev.gemmapp.com
+    paths:
+    - path: /
+      pathType: Prefix
+tls: []      
+
+# Resource Limits and Requests
+resources:
+  limits:
+    cpu: 500m
+    memory: 512mi
+  requests:
+    cpu: 250
+    memory: 256mi
+
+# AutoScaling configuration 
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 80
+
+# Node Selector 
+nodeSelector: {}
+
+# Affinity Rules
+affinity: {}
+
+# Liveness Probe
+livenessProbe:
+  httpGet:
+    path: /health
+    port: 8080
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    path: /ready
+    port: 8080
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 3
+
+# Environment Variables
+env:
+  - name: APP_ENV
+    value: "development"
+  - name: LOG_LEVEL
+    value: "info"
+  - name: PORT
+    value: "8080"
+
+# Environment variables from configMap
+envFrom: []
+
+# secrets stored in external store e.g. AWS KMS
+# DATABASE_URL API_KEY
+secrets: {}
+
+# ConfigMap Data
+configMap:
+  enabled: true
+  data:
+    app.config: |
+      {
+        "feature_flags": {
+          "new_feature": false
+        }
+      }
+
+# Persistence Volume Claims
+persistence:
+  enabled: false
+  storageClass: gp3
+  accessMode: ReadWriteOnce
+  size: 10Gi
+  mountPath: /data
+
+# Pod Disuption Budget
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+# Network Policy
+networkPolicy:
+  enabled: false
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            name: ingress-nginx
+  egress:
+    - to:
+      - namespaceSelector: {}
+    ports:
+    - protocol: TCP 
+      port: 443
+
+serviceMonitor:
+  enabled: false
+  interval: 30s
+  path: /metrics
+
+# Additional Labels to add to all resources
+labels: {}
+
+# Additional annotations
+annotations: {}
+
+
+
+
+
+
+
+
+
+
+
+
+
