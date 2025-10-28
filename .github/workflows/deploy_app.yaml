@@ -37,7 +37,7 @@ jobs:
           cd /opt/homebrew/var/deploy/infrastructure/environments/dev
           terraform init
           CLUSTER_NAME=$(terraform output -raw cluster_name)
-          CERT_ARN=$(terraform output -raw acm_certificate_arn)
+          CERT_ARN=$(terraform output -raw cert_arn)
           ALB_SG_ID=$(terraform output -raw alb_security_group_id)
           SUBNETS=$(terraform output -json public_subnet_ids | jq -r  'join(",")')
 

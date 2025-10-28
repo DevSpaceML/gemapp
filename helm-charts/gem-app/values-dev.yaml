@@ -63,10 +63,8 @@ Ingress:
 # Service Config Values
 Service:
   type: ClusterIP
-  port: 80
+  port: 8080
   targetPort: 8080
-    
-  
 
 # Deployment Config Values
 resources:

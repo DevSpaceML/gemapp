@@ -21,7 +21,7 @@ spec:
   tls:
     {{- range .Values.ingress.tls }}
     - hosts:
-        {{ range .hosts }}
+        {{ range.hosts }}
         - {{ . | quote }}
         {{- end }}
       secretName: {{ .secretName }}
@@ -37,7 +37,7 @@ spec:
             pathType: {{ .pathType }}
             backend:
               service:
-                name: {{ include "gemapp.fullname" $}}
+                name: {{ include "gemapp.fullname" }}
                 port:
                   number: {{ $.Values.service.port }}
         {{- end }}
