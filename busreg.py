@@ -19,4 +19,3 @@ class BusRegForm(FlaskForm):
     def __init__(self, arg):
         super(BusRegForm, self).__init__()
         self.arg = arg
-

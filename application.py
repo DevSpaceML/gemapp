@@ -3,7 +3,7 @@ from flask_wtf import FlaskForm, CSRFProtect
 from wtforms import Form, StringField, SubmitField,SelectField, validators
 from wtforms.widgets import TextArea
 from flask_bootstrap import Bootstrap5
-import pietest as database
+import pietest as dbtest
 from  busreg import BusRegForm
 from eventsform import EventsForm
 
@@ -23,7 +23,7 @@ def activities():
 @app.route("/accomodation")
 def accomodation():
 	
-	results = pietest.accommodation_data('mozambique', 'tofo', 'style','beach')
+	results = dbtest.accommodation_data('mozambique', 'tofo', 'style','beach')
 	data = results['data']
 
 	return render_template('accomodation.html', dataset = data)

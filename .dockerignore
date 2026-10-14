@@ -1,14 +1,50 @@
+# Python bytecode
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
+*.pdb
+
+# Virtual environments
 env/
 venv/
 .venv/
+
+# IDE / OS noise
 .idea/
+.vscode/
 .DS_Store
+Thumbs.db
+
+# Version control
 .git/
+.gitignore
+.gitattributes
+
+# Tests & coverage
 tests/
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# Environment / secrets  ← most important additions
+.env
+.env.*
+*.env
+secrets/
+
+# Docker files themselves (no need to copy these in)
+Dockerfile
+.dockerignore
+docker-compose*.yml
+
+# Logs & temp files
+*.log
+logs/
+tmp/
+
+# Your existing custom entries
 .encodings/
 usr/
 lib/
