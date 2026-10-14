@@ -1,13 +1,5 @@
 name: deploy_app
-
 on:
-  push:
-    branches:
-      - dev
-      - staging
-  pull_request:
-    branches:
-      - main
   workflow_dispatch:
     inputs:
       environments:
