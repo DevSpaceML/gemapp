@@ -91,8 +91,8 @@ jobs:
           exit-code: "1"
           trivyignores: trivyignore.yml
 
-      - uses: actions/upload-artifact@v4
-        name: image
+      - name: image upload
+        uses: actions/upload-artifact@v4
         path: /tmp/image.tar
         retention-days: 1
 
@@ -103,19 +103,22 @@ jobs:
       id-token: write
       contents: read
     steps:
-      - uses: actions/download-artifact@v4
+      - name: Download artifact
+        uses: actions/download-artifact@v4
         with:
           name: image
           path: /tmp
 
       - run: docker load -i /tmp/image.tar
 
-      - uses: aws-actions/configure-aws-credentials@v4
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::488347380548:role/gha_deploy
           aws-region: ${{ env.region }}
 
-      - id: ecr
+      - name: Login to AWS ECR
+        id: ecr
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Tag and Push
