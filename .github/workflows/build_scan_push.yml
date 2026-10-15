@@ -45,9 +45,9 @@ jobs:
             APP="$REPO"
             case "$BRANCH" in
               dev) ENV=dev ;;
-              staging) ENV=main ;;
+              main) ENV=main ;;
               *) echo "No mapped environment for branch $BRANCH"; exit 1;;
-            esac  
+            esac
           fi
           [[ "$APP" =~ ^[a-z0-9][a-z0-9-]*$ ]] || { echo "Invalid app name"; exit 1; }
           echo "app=$APP" >> "$GITHUB_OUTPUT"
@@ -61,13 +61,12 @@ jobs:
       group: build-${{ needs.resolve-vars.outputs.app }}-${{ needs.resolve-vars.outputs.env }}
       cancel-in-progress: ${{ needs.resolve-vars.outputs.env == 'dev' }}
     env:
-      AWS_REGION: 'us-east-1'
       APP: ${{ needs.resolve-vars.outputs.app }}
       TARGET_ENV: ${{ needs.resolve-vars.outputs.env }}
     permissions:
       contents: read
       security-events: write
-
+      actions: read
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
