@@ -7,6 +7,22 @@ on:
       - '.github/workflows/**'
       - 'helm-charts/**'
       - 'scripts/**'
+  workflow_dispatch:
+    inputs:
+      app:
+        description: App name (defaults to repo name)
+        required: false
+      env:
+        description: Target environment
+        required: true
+        type: choice
+        options: [dev,staging, prod]
+
+permissions:
+  contents: read
+env:
+  AWS_REGION: us-east-1
+
 jobs:
   resolve-vars:
     runs-on: ubuntu-latest
@@ -23,27 +39,27 @@ jobs:
           REPO: ${{ github.event.repository.name }}
         run: |
           if [[ "$EVENT" = "workflow_dispatch" ]]; then
-            APP="${$INPUT_APP:-$REPO}"
+            APP="${INPUT_APP:-$REPO}"
             ENV="${INPUT_ENV}"
           else
             APP="$REPO"
             case "$BRANCH" in
               dev) ENV=dev ;;
-              staging) ENV=staging ;;
+              staging) ENV=main ;;
               *) echo "No mapped environment for branch $BRANCH"; exit 1;;
+            esac  
           fi
           [[ "$APP" =~ ^[a-z0-9][a-z0-9-]*$ ]] || { echo "Invalid app name"; exit 1; }
           echo "app=$APP" >> "$GITHUB_OUTPUT"
-          echo "env=$ENV" >> "$GITHUB_OUTPUT
+          echo "env=$ENV" >> "$GITHUB_OUTPUT"
 
   build-scan-image:
     name: build-scan
     needs: resolve-vars
     runs-on: ubuntu-latest
-    environment: ${{ needs.resolve-vars.outputs.env }}
     concurrency:
       group: build-${{ needs.resolve-vars.outputs.app }}-${{ needs.resolve-vars.outputs.env }}
-      cancel-in-progress: ${{ needs.resolve.outputs.env == 'dev' }}
+      cancel-in-progress: ${{ needs.resolve-vars.outputs.env == 'dev' }}
     env:
       AWS_REGION: 'us-east-1'
       APP: ${{ needs.resolve-vars.outputs.app }}
@@ -51,59 +67,65 @@ jobs:
     permissions:
       contents: read
       security-events: write
+
     steps:
-      - uses: actions/checkout@v4
-        name: aws-actions/configure-aws-credentials@v4
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::488347380548:role/gha_deploy
           aws-region: 'us-east-1'
 
-      - uses: docker/setup-buildx-action@v3
-        name: build-image
+      - name: build-image
         uses: docker/build-push-action@v6
         with:
           context: .
-          tags: gemapp:{{ github.sha }}
+          tags: gemapp:${{ github.sha }}
           outputs: type=docker,dest=/tmp/image.tar
           platforms: linux/arm64
 
       - run: docker load -i /tmp/image.tar
 
-      - name: Trivy Report
-        uses: acquasecurity/trivy-action@0.28.0
+      - name: Scan Image
+        uses: aquasecurity/trivy-action@0.28.0
         with:
           image-ref: gemapp:${{ github.sha }}
           format: sarif
           output: trivy.sarif
           exit-code: "0"
 
-      - name: Upload Artifacts    
+      - name: Trivy Gate
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: gemapp:${{ github.sha }}
+          severity: CRITICAL,HIGH
+          ignore-unfixed: true
+          exit-code: "1"
+          trivyignores: trivyignore.yml    
+
+      - name: Upload Trivy report    
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif-file: trivy.sarif
 
-      - name: Trivy Gate
-        uses: acquasecurity/trivy-action@0.28.0
-        with:
-          image-ref: gemapp:${{ github.sha }}
-          severity: CRITICAL, HIGH
-          ignore-unfixed: true
-          exit-code: "1"
-          trivyignores: trivyignore.yml
-
       - name: image upload
         uses: actions/upload-artifact@v4
-        path: /tmp/image.tar
-        retention-days: 1
+        path: "/tmp/image.tar"
 
   push-to-ecr:
-    needs: build-scan-image
+    needs: [resolve-vars,build-scan-image]
+    runs-on: ubuntu-latest
     environment: ${{ needs.resolve-vars.outputs.env}}
+    env:
+      app: ${{ needs.resolve-vars.outputs.app }}
+      target_repo: ${{ needs.resolve-vars.outputs.env }}-${{ needs.resolve-vars.outputs.app }}
     permissions:
       id-token: write
       contents: read
     steps:
-      - name: Download artifact
+      - name: Download Image artifact
         uses: actions/download-artifact@v4
         with:
           name: image
@@ -123,7 +145,7 @@ jobs:
 
       - name: Tag and Push
         run: | 
-          IMAGE=${{ steps.ecr.outputs.registry }}/${{ env.repo }}:${{ github.sha }}
+          IMAGE=${{ steps.ecr.outputs.registry }}/${{ env.target_repo }}:${{ github.sha }}
           docker tag ${{ env.app }}:${{ github.sha }} $IMAGE
           docker push $IMAGE
 
