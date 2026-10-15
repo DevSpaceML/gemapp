@@ -103,7 +103,7 @@ jobs:
           severity: CRITICAL,HIGH
           ignore-unfixed: true
           exit-code: "1"
-          trivyignores: trivyignore.yml    
+          trivyignores: .trivyignore.yml    
 
       - name: Upload Trivy report    
         uses: github/codeql-action/upload-sarif@v3
@@ -112,7 +112,10 @@ jobs:
 
       - name: image upload
         uses: actions/upload-artifact@v4
-        path: "/tmp/image.tar"
+        with:
+          name: image
+          path: /tmp/image.tar
+          retention-days: 1
 
   push-to-ecr:
     needs: [resolve-vars,build-scan-image]
