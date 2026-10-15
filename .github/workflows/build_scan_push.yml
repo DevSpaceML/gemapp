@@ -56,7 +56,7 @@ jobs:
   build-scan-image:
     name: build-scan
     needs: resolve-vars
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     concurrency:
       group: build-${{ needs.resolve-vars.outputs.app }}-${{ needs.resolve-vars.outputs.env }}
       cancel-in-progress: ${{ needs.resolve-vars.outputs.env == 'dev' }}
@@ -81,7 +81,7 @@ jobs:
           mask-aws-account-id: false
 
       - name: Setup Docker BuildX
-        uses: docker/setup-buildx-actions@v3    
+        uses: docker/setup-buildx-action@v3    
 
       - name: build-image
         uses: docker/build-push-action@v6
