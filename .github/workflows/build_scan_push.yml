@@ -64,6 +64,7 @@ jobs:
       APP: ${{ needs.resolve-vars.outputs.app }}
       TARGET_ENV: ${{ needs.resolve-vars.outputs.env }}
     permissions:
+      id-token: write
       contents: read
       security-events: write
       actions: read
