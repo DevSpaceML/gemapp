@@ -76,7 +76,7 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::488347380548:role/gha_deploy
           role-session-name: GitHub-Actions-OIDC-Session
-          aws-region: ${{ env.AWS_REGION }}
+          aws-region: us-east-1
           mask-aws-account-id: false
 
       - name: build-image
@@ -142,7 +142,7 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::488347380548:role/gha_deploy
           role-session-name: GitHub-Actions-OIDC-Session
-          aws-region: ${{ env.AWS_REGION }}
+          aws-region: us-east-1
           mask-aws-account-id: false
 
       - name: Login to AWS ECR
