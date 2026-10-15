@@ -80,6 +80,9 @@ jobs:
           aws-region: us-east-1
           mask-aws-account-id: false
 
+      - name: Setup Docker BuildX
+        uses: docker/setup-buildx-actions@v3    
+
       - name: build-image
         uses: docker/build-push-action@v6
         with:
@@ -87,6 +90,7 @@ jobs:
           tags: gemapp:${{ github.sha }}
           outputs: type=docker,dest=/tmp/image.tar
           platforms: linux/arm64
+          push: false
 
       - run: docker load -i /tmp/image.tar
 
