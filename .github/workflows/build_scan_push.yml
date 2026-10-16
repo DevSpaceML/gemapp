@@ -121,7 +121,7 @@ jobs:
     environment: ${{ needs.resolve-vars.outputs.env}}
     env:
       app: ${{ needs.resolve-vars.outputs.app }}
-      target_repo: ${{ needs.resolve-vars.outputs.env }}-${{ needs.resolve-vars.outputs.app }}
+      target_repo: ${{ needs.resolve-vars.outputs.env }}/${{ needs.resolve-vars.outputs.app }}
     permissions:
       id-token: write
       contents: read
