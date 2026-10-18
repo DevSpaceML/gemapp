@@ -2,7 +2,13 @@
 name: build-and-push-image
 on:
   push:
-    branches: [dev,main]
+    branches: [dev]
+    paths-ignore:
+      - '.github/workflows/**'
+      - 'helm-charts/**'
+      - 'scripts/**'
+  merge:
+    branches: [dev,staging]
     paths-ignore:
       - '.github/workflows/**'
       - 'helm-charts/**'
@@ -16,13 +22,11 @@ on:
         description: Target environment
         required: true
         type: choice
-        options: [dev,staging, prod]
-
+        options: [dev,staging]
 permissions:
   contents: read
 env:
   AWS_REGION: us-east-1
-
 jobs:
   resolve-vars:
     runs-on: ubuntu-latest
