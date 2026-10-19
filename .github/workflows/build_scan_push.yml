@@ -1,8 +1,8 @@
 # Build and Push ECR Image
 name: build-and-push-image
 on:
-  push:
-    branches: [dev]
+  pull_request:
+    branches: [dev, staging]
     paths-ignore:
       - '.github/workflows/**'
       - 'helm-charts/**'
