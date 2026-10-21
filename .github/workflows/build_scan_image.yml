@@ -15,7 +15,7 @@ permissions:
 concurrency:
   group: build-scan-${{ github.event.pull_request.number || github.ref_name }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
-  
+
 jobs:
   build-scan-image:
     name: build-scan
@@ -80,7 +80,7 @@ jobs:
           retention-days: 1
 
   publish:
-    needs: build-scan
+    needs: build-scan-image
     if: github.event_name == 'push'
     uses: ./.github/workflows/push_ecr_image.yml
     permissions:
