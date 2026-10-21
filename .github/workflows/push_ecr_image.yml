@@ -1,0 +1,61 @@
+# Build and Scan ECR Image
+name: push-ecr-image
+on:
+  workflow_call:
+    inputs:
+      app:
+        type: string
+        required: true
+      environment:
+        type: string
+        required: true  
+      image-tag:
+        type: string
+        required: true
+permissions:
+  contents: read
+env:
+  AWS_REGION: us-east-1
+
+jobs:
+  push-to-ecr:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    concurrency:
+      group: push-${{ inputs.app }}-${{ inputs.environment }}
+      cancel-in-progress: false
+    env:
+      APP: ${{ inputs.app }}
+      TAG: ${{ inputs.image-tag }}
+      ENVIRONMENT: ${{ inputs.environment }}
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Download Image artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: image
+          path: /tmp
+
+      - run: docker load -i /tmp/image.tar
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::488347380548:role/gha_deploy
+          role-session-name: GitHub-Actions-OIDC-Session
+          aws-region: us-east-1
+          mask-aws-account-id: false
+
+      - name: Login to AWS ECR
+        id: ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Tag and Push
+        env:
+         REGISTRY: ${{ steps.ecr.outputs.registry }}
+        run: |
+          DESTINATION="$REGISTRY/$ENVIRONMENT/$APP:$TAG"
+          docker tag "$APP:$TAG" "$DESTINATION"
+          docker push "$DESTINATION"
